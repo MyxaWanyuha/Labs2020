@@ -5,7 +5,8 @@
 bool СellsAreFarApartOrGoesAbroad(int i1, int i2, int j1, int j2, int n, int m) noexcept
 {
     return std::abs(i1 - i2) > 1 || std::abs(j1 - j2) > 1
-        || i1 >= n || i2 >= n || j1 >= m || j2 >= m;
+        || i1 >= n || i2 >= n || j1 >= m || j2 >= m 
+        || i1 <  0 || j1 <  0 || i2 <  0 || j2 <  0;
 }
 
 void NormalizePoints(int& i1, int& j1, int& i2, int& j2) noexcept
