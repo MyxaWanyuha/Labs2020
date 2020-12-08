@@ -2,42 +2,41 @@
 #include <algorithm>
 #include <iostream>
 
-bool СellsAreFarApartOrGoesAbroad(int i1, int i2, int j1, int j2, int n, int m) noexcept
+bool Maze::hasConnection(int i1, int j1, int i2, int j2) const
 {
-    return std::abs(i1 - i2) > 1 || std::abs(j1 - j2) > 1
-        || i1 >= n || i2 >= n || j1 >= m || j2 >= m 
-        || i1 <  0 || j1 <  0 || i2 <  0 || j2 <  0;
-}
+    if (std::abs(i1 - i2) > 1 || std::abs(j1 - j2) > 1
+        || i1 >= n || i2 >= n || j1 >= m || j2 >= m
+        || i1 < 0 || j1 < 0 || i2 < 0 || j2 < 0)
+        return false;
 
-void NormalizePoints(int& i1, int& j1, int& i2, int& j2) noexcept
-{
     if (i2 < i1)
         std::swap(i1, i2);
     else if (j2 < j1)
         std::swap(j1, j2);
-}
 
-bool Maze::hasConnection(int i1, int j1, int i2, int j2) const
-{
-    if (СellsAreFarApartOrGoesAbroad(i1, i2, j1, j2, n, m))
-        return false;
-    NormalizePoints(i1, j1, i2, j2);
     return i1 != i2 && cell(i1, j1).down() || j1 != j2 && cell(i1, i2).right();
 }
 
 bool Maze::makeConnection(int i1, int j1, int i2, int j2)
 {
-    if(СellsAreFarApartOrGoesAbroad(i1, i2, j1, j2, n, m))
+    if(std::abs(i1 - i2) > 1 || std::abs(j1 - j2) > 1
+        || i1 >= n || i2 >= n || j1 >= m || j2 >= m
+        || i1 < 0 || j1 < 0 || i2 < 0 || j2 < 0)
         return false;
-    NormalizePoints(i1, j1, i2, j2);
+
+    if (i2 < i1)
+        std::swap(i1, i2);
+    else if (j2 < j1)
+        std::swap(j1, j2);
+
     if (i1 < i2 && j1 == j2)
     {
-        cell(i1, j1).m_down = true;
+        m_field[i1 * n + j1].m_down = true;
         return true;
     }
     if (j1 < j2 && i1 == i2)
     {
-        cell(i1, j1).m_right = true;
+        m_field[i1 * n + j1].m_right = true;
         return true;
     }
     return false;
@@ -45,17 +44,24 @@ bool Maze::makeConnection(int i1, int j1, int i2, int j2)
 
 bool Maze::removeConnection(int i1, int j1, int i2, int j2)
 {
-    if (СellsAreFarApartOrGoesAbroad(i1, i2, j1, j2, n, m))
+    if (std::abs(i1 - i2) > 1 || std::abs(j1 - j2) > 1
+        || i1 >= n || i2 >= n || j1 >= m || j2 >= m
+        || i1 < 0 || j1 < 0 || i2 < 0 || j2 < 0)
         return false;
-    NormalizePoints(i1, j1, i2, j2);
+
+    if (i2 < i1)
+        std::swap(i1, i2);
+    else if (j2 < j1)
+        std::swap(j1, j2);
+
     if (i1 < i2 && j1 == j2)
     {
-        cell(i1, j1).m_down = false;
+        m_field[i1 * n + j1].m_down = true;
         return true;
     }
     if (j1 < j2 && i1 == i2)
     {
-        cell(i1, j1).m_right = false;
+        m_field[i1 * n + j1].m_right = false;
         return true;
     }
     return false;
@@ -70,6 +76,18 @@ void Maze::printMaze() const
             MCell beyond;
             auto upCell = (i - 1) < 0 ? beyond : cell(i - 1, j);
             auto leftCell = (j - 1) < 0 ? beyond : cell(i, j - 1);
+
+            auto countConnections = 0;
+            countConnections += upCell.down() ? 1 : 0;
+            countConnections += leftCell.right() ? 1 : 0;
+            countConnections += cell(i, j).down() ? 1 : 0;
+            countConnections += cell(i, j).right() ? 1 : 0;
+
+            if (countConnections < 2)
+            {
+                std::cout << '0';
+                continue;
+            }
 
             if (cell(i, j).down() && !cell(i, j).right())//down
             {

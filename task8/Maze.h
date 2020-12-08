@@ -11,7 +11,6 @@ public:
 	bool removeConnection(int i1, int j1, int i2, int j2);
 	void printMaze() const;
 private:
-	MCell& cell(int i, int j) { return const_cast<MCell&>(static_cast<const Maze&>(*this).cell(i, j)); }
 	Maze() = delete;
 	MCell* m_field;
 	int n;
