@@ -2,6 +2,16 @@
 #include <algorithm>
 #include <iostream>
 
+Maze::~Maze()
+{
+    delete[] m_field;
+}
+
+const MCell& Maze::cell(int i, int j) const
+{
+    return m_field[i * n + j];
+}
+
 bool Maze::hasConnection(int i1, int j1, int i2, int j2) const
 {
     if (std::abs(i1 - i2) > 1 || std::abs(j1 - j2) > 1
@@ -16,6 +26,7 @@ bool Maze::hasConnection(int i1, int j1, int i2, int j2) const
 
     return i1 != i2 && cell(i1, j1).down() || j1 != j2 && cell(i1, i2).right();
 }
+
 
 bool Maze::makeConnection(int i1, int j1, int i2, int j2)
 {

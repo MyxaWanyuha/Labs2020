@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include "Maze.h"
-
+class Maze;
 int main()
 {
     Maze maze(5, 5);
