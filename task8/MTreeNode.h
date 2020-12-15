@@ -13,7 +13,7 @@ public:
 	static MTreeNode* beginTree(int i, int j);
 	~MTreeNode();
 private:
-	MTreeNode(MTreeNode* parent) : m_distance(parent ? parent->m_distance + 1 : 0), m_parent(parent) {};
+	MTreeNode(MTreeNode* parent);
 	int m_i = -1;
 	int m_j = -1;
 	int m_distance = 0;

@@ -86,3 +86,7 @@ MTreeNode::~MTreeNode()
 {
 	delete[] m_children;
 }
+
+MTreeNode::MTreeNode(MTreeNode* parent) : m_distance(parent ? parent->m_distance + 1 : 0), m_parent(parent)
+{
+}

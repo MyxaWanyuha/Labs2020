@@ -47,9 +47,8 @@ int main()
     Maze maze(5, 5);
     for (int i = -1; i < 4; i++)
     {
-        auto iIncr = i + 1;
-        maze.makeConnection(i, iIncr, iIncr, iIncr);
-        maze.makeConnection(iIncr, iIncr, iIncr, iIncr + 1);
+        maze.makeConnection(i, i + 1, i + 1, i + 1);
+        maze.makeConnection(i + 1, i + 1, i + 1, i + 2);
     }
     maze.printMaze();
     std::cout << '\n';
